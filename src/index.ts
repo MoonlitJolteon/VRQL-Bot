@@ -4,9 +4,27 @@ import * as dotenv from 'dotenv';
 import Enmap from 'enmap';
 dotenv.config();
 
+export interface player {
+    playerID: string,
+    playerName: string,
+    discordID: string,
+    teamID: string,
+    teamPosition: string
+}
+
+export interface team {
+    teamID: string,
+    teamName: string,
+    players: player[]
+}
+
 export class customApp extends Slasho.App<any> {
+    teams: Enmap<string, team>
+    players: Enmap<string, player>
     constructor(options: Slasho.Config, state: any) {
         super(options, state);
+        this.teams = new Enmap('teams');
+        this.players = new Enmap('players');
     }
 }
 
