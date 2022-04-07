@@ -1,10 +1,10 @@
-import { CommandInteraction, MessageEmbed } from "discord.js";
+import { CommandInteraction, GuildMember, MessageEmbed } from "discord.js";
 import { bot, team } from '../../index';
 
 module.exports = {
     //Command metadata
     type: "slash",
-    name: "team-test",
+    name: "create-team",
     description: "Create a team",
     options: [
         {
@@ -20,21 +20,46 @@ module.exports = {
         await interaction.deferReply();
         const teamName = interaction.options.getString("teamname")!;
         const allTeams = bot.teams.fetchEverything();
+        const player = bot.players.get(interaction.user.id);
+        if (!player) {
+            interaction.editReply("You must set up your player profile first");
+            return setTimeout(() => interaction.deleteReply(), 3000);
+        }
+
         let teamNames = [];
-        for(let team of allTeams) {
+        for (let team of allTeams) {
             teamNames.push(team[1].teamName);
         }
 
-        if(!teamNames.includes(teamName)) {
-            await interaction.editReply(`Creating ${teamName}`);
-            bot.teams.set(teamName, {
-                teamID: teamName,
-                teamName: teamName
-            } as team);
+        if (!teamNames.includes(teamName)) {
+            if (player.teamID == '') {
+                await interaction.editReply(`Creating ${teamName}`);
+                const teamID = teamName;
+
+                player.teamID = teamID;
+                player.teamPosition = "Captain";
+
+                const teamObj: team = {
+                    teamID,
+                    teamName,
+                    players: [
+                        player
+                    ],
+                    wins: 0,
+                    losses: 0,
+                    matches: [],
+                    mmr: 1100
+                }
+
+                bot.teams.set(teamID, teamObj);
+                bot.players.set(interaction.user.id, player);
+            } else {
+                await interaction.editReply(`You're already on a team!`);
+            }
         } else {
-            await interaction.editReply(`Hello ${teamName}`);
+            await interaction.editReply(`${teamName} Already Exists`);
         }
 
-        setTimeout(() => interaction.deleteReply(), 500);
+        setTimeout(() => interaction.deleteReply(), 3000);
     }
 } 

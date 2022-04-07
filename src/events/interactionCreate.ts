@@ -1,4 +1,5 @@
 import { ButtonInteraction, Client, GuildMember, Interaction, Message, User } from "discord.js";
+import { bot } from "../index";
 
 async function handleRoles(client: Client, event: Interaction) {
     const button = event as ButtonInteraction;
@@ -190,6 +191,27 @@ async function handleRoles(client: Client, event: Interaction) {
     }, 1000);
 }
 
+async function handleDisband(client: Client, event: Interaction) {
+    const button = event as ButtonInteraction;
+    switch (button.customId) {
+        case "confirmDisband":
+            button.reply("Confirmed...");
+            const player = bot.players.get(button.user.id)!;
+            bot.teams.delete(player.teamID);
+            player.teamID = '';
+            player.teamPosition = "No Team";
+            bot.players.set(button.user.id, player);
+            break;
+        case "cancelDisband":
+        default:
+            button.reply("Cancelled...");
+    }
+    setTimeout(() => {
+        button.deleteReply();
+        (button.message as Message).delete()
+    }, 500);
+}
+
 module.exports = {
     event: "interactionCreate",
     async execute({ client, event }: { client: Client, event: Interaction }) {
@@ -204,6 +226,9 @@ module.exports = {
             const button = event as ButtonInteraction
             if (button.customId.includes("Role"))
                 handleRoles(client, event)
+
+            if (button.customId.includes("Disband"))
+                handleDisband(client, event);
         }
 
     }

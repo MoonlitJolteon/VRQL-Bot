@@ -5,17 +5,34 @@ import Enmap from 'enmap';
 dotenv.config();
 
 export interface player {
-    playerID: string,
-    playerName: string,
-    discordID: string,
-    teamID: string,
+    discordID: string
+    oculusName: string
+    teamID: string
     teamPosition: string
 }
 
+export interface matchScores {
+    round1: { home: number, away: number, forfeit: boolean }
+    round2: { home: number, away: number, forfeit: boolean }
+    round3: { home: number, away: number, played: boolean, forfeit: boolean }
+    summary: { home: number, away: number, homeWon: boolean}
+}
+
+export interface match {
+    matchID: number
+    homeTeam: team
+    awayTeam: team
+    scores: matchScores
+}
+
 export interface team {
-    teamID: string,
-    teamName: string,
+    teamID: string
+    teamName: string
     players: player[]
+    wins: number
+    losses: number
+    matches: match[],
+    mmr: number
 }
 
 export class customApp extends Slasho.App<any> {
@@ -28,7 +45,7 @@ export class customApp extends Slasho.App<any> {
     }
 }
 
-export const bot = new customApp( {
+export const bot = new customApp({
     token: process.env.TOKEN!,
     devGuild: process.env.DEV_GUILD_ID || '',
     intents: ["GUILDS"],
@@ -39,7 +56,7 @@ export const bot = new customApp( {
 bot.launch().then(async () => {
     // bot.dev();
     // bot.production();
-    bot.client.user!.setPresence({ activities: [{type: 'COMPETING', name: 'VRQL with /help' }], status: 'online' });
+    bot.client.user!.setPresence({ activities: [{ type: 'COMPETING', name: 'VRQL with /help' }], status: 'online' });
     const devGuild = await bot.client.guilds.fetch(process.env.DEV_GUILD_ID || '');
     const devChannel = await devGuild.channels.fetch(process.env.DEV_CHANNEL_ID || '') as TextChannel;
     // devChannel!.send(`Successfully initialized. Ready to serve ${bot.client.guilds.cache.size} guilds.`);
