@@ -1,5 +1,5 @@
 import { CommandInteraction, GuildMember, MessageEmbed } from "discord.js";
-import { bot, team } from '../../index';
+import { bot, Team } from '../../index';
 
 module.exports = {
     //Command metadata
@@ -39,7 +39,7 @@ module.exports = {
                 player.teamID = teamID;
                 player.teamPosition = "Captain";
 
-                const teamObj: team = {
+                const teamObj: Team = {
                     teamID,
                     teamName,
                     players: [

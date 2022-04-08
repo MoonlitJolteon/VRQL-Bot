@@ -1,5 +1,5 @@
 import { CommandInteraction, GuildMember, MessageEmbed } from "discord.js";
-import { bot, team } from '../../index';
+import { bot, Team } from '../../index';
 
 module.exports = {
     //Command metadata

@@ -1,10 +1,10 @@
-import { matchScores, team } from "../index";
+import { MatchScores, Team } from "../index";
 
 function roundToTheHundredth(num: number): number {
     return Math.round(num * 100) / 100
 }
 
-export function updateMMR(homeTeam: team, awayTeam: team, scores: matchScores) {
+export function updateMMR(homeTeam: Team, awayTeam: Team, scores: MatchScores) {
     const homeRating = homeTeam.mmr;
     const awayRating = awayTeam.mmr;
 

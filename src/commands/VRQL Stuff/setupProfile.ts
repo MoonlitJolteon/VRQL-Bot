@@ -1,5 +1,5 @@
 import { CommandInteraction, GuildMember, MessageEmbed } from "discord.js";
-import { bot, player } from '../../index';
+import { bot, Player } from '../../index';
 
 module.exports = {
     //Command metadata
@@ -22,7 +22,7 @@ module.exports = {
         const player = bot.players.get(interaction.user.id);
 
         if (!player) {
-            const playerObj: player = {
+            const playerObj: Player = {
                 discordID: interaction.user.id,
                 oculusName: playerName,
                 teamID: "",

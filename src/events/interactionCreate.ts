@@ -3,6 +3,7 @@ import { bot } from "../index";
 
 async function handleRoles(client: Client, event: Interaction) {
     const button = event as ButtonInteraction;
+    button.deferReply({ephemeral: true});
     const member = (button.member as GuildMember)
     const roleIDs: string[] = [];
     const roles = member.roles.cache;
@@ -13,10 +14,10 @@ async function handleRoles(client: Client, event: Interaction) {
             currRole = '960967932744183808'
             if (roleIDs.includes(currRole)) {
                 member.roles.remove(currRole);
-                await button.reply(`Removed Trans role from ${member.displayName}`);
+                await button.editReply(`Removed Trans role from ${member.displayName}`);
             } else {
                 member.roles.add(currRole);
-                await button.reply(`Given Role role to ${member.displayName}`);
+                await button.editReply(`Given Role role to ${member.displayName}`);
             }
             break;
         case "fluidRole":
@@ -185,17 +186,13 @@ async function handleRoles(client: Client, event: Interaction) {
         default:
             await button.reply(`Unknown button ${button.customId}`);
     }
-
-    setTimeout(() => {
-        button.deleteReply();
-    }, 1000);
 }
 
 async function handleDisband(client: Client, event: Interaction) {
     const button = event as ButtonInteraction;
     switch (button.customId) {
         case "confirmDisband":
-            button.reply("Confirmed...");
+            button.editReply("Confirmed...");
             const player = bot.players.get(button.user.id)!;
             bot.teams.delete(player.teamID);
             player.teamID = '';

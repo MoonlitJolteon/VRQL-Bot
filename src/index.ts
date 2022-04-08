@@ -4,40 +4,47 @@ import * as dotenv from 'dotenv';
 import Enmap from 'enmap';
 dotenv.config();
 
-export interface player {
+export interface Player {
     discordID: string
     oculusName: string
     teamID: string
     teamPosition: string
 }
 
-export interface matchScores {
+export interface MatchScores {
     round1: { home: number, away: number, forfeit: boolean }
     round2: { home: number, away: number, forfeit: boolean }
     round3: { home: number, away: number, played: boolean, forfeit: boolean }
     summary: { home: number, away: number, homeWon: boolean}
 }
 
-export interface match {
+export interface Match {
     matchID: number
-    homeTeam: team
-    awayTeam: team
-    scores: matchScores
+    homeTeam: Team
+    awayTeam: Team
+    scores: MatchScores
 }
 
-export interface team {
+export interface UpcomingMatch {
+    matchID: number
+    homeTeam: Team
+    awayTeam: Team
+}
+
+export interface Team {
     teamID: string
     teamName: string
-    players: player[]
+    players: Player[]
     wins: number
     losses: number
-    matches: match[],
+    matches: Match[],
+    upcomingMatches: UpcomingMatch[]
     mmr: number
 }
 
 export class customApp extends Slasho.App<any> {
-    teams: Enmap<string, team>
-    players: Enmap<string, player>
+    teams: Enmap<string, Team>
+    players: Enmap<string, Player>
     constructor(options: Slasho.Config, state: any) {
         super(options, state);
         this.teams = new Enmap('teams');

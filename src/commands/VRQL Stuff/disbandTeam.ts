@@ -1,6 +1,6 @@
 import { CommandInteraction, GuildMember, MessageActionRow, MessageButton, MessageEmbed } from "discord.js";
 import { MessageButtonStyles } from "discord.js/typings/enums";
-import { bot, team } from '../../index';
+import { bot, Team } from '../../index';
 
 module.exports = {
     //Command metadata
